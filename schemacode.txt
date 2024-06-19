@@ -1,0 +1,133 @@
+const { Client } = require('@elastic/elasticsearch');
+const rp = require('request-promise');
+
+// Initialize the Elasticsearch client
+const client = new Client({
+  node: 'http://localhost:9200' // Replace with your Elasticsearch server URL
+});
+
+const schema = {
+  mappings: {
+    properties: {
+      channel_name: {
+        type: 'keyword',
+        index: true
+      },
+      app_name: {
+        type: 'keyword',
+        index: true
+      },
+      severity: {
+        type: 'integer',
+        index: true
+      },
+      issue_id: {
+        type: 'keyword',
+        index: true
+      },
+      lessons_learned: {
+        type: 'text',
+        index: true,
+        fields: {
+          keyword: {
+            type: 'keyword',
+            ignore_above: 256,
+            index: true
+          }
+        }
+      },
+      why1: {
+        type: 'text',
+        index: true,
+        fields: {
+          keyword: {
+            type: 'keyword',
+            ignore_above: 256,
+            index: true
+          }
+        }
+      },
+      why2: {
+        type: 'text',
+        index: true,
+        fields: {
+          keyword: {
+            type: 'keyword',
+            ignore_above: 256,
+            index: true
+          }
+        }
+      },
+      why3: {
+        type: 'text',
+        index: true,
+        fields: {
+          keyword: {
+            type: 'keyword',
+            ignore_above: 256,
+            index: true
+          }
+        }
+      },
+      why4: {
+        type: 'text',
+        index: true,
+        fields: {
+          keyword: {
+            type: 'keyword',
+            ignore_above: 256,
+            index: true
+          }
+        }
+      },
+      why5: {
+        type: 'text',
+        index: true,
+        fields: {
+          keyword: {
+            type: 'keyword',
+            ignore_above: 256,
+            index: true
+          }
+        }
+      },
+      category: {
+        type: 'keyword',
+        index: true
+      },
+      issue_start_date: {
+        type: 'date',
+        index: true
+      },
+      issue_end_date: {
+        type: 'date',
+        index: true
+      },
+      why_semantic_vector: {
+        type: 'dense_vector',
+        dims: 512,
+        index: false
+      },
+      lessons_learned_semantic_vector: {
+        type: 'dense_vector',
+        dims: 512,
+        index: false
+      }
+    }
+  }
+};
+
+// Function to create the index with the schema
+async function createIndex() {
+  try {
+    const response = await client.indices.create({
+      index: 'incidents',
+      body: schema
+    });
+    console.log('Index created:', response);
+  } catch (error) {
+    console.error('Error creating index:', error);
+  }
+}
+
+createIndex();
